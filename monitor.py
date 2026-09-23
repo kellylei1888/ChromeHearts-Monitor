@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Chrome Hearts 官网上新监控。
+"""Chrome Hearts ÂÆòÁΩë‰∏äÊñ∞ÁõëÊéß„ÄÇ
 
-每次运行：抓取官网所有商品分类页 -> 与上次快照对比 -> 有变化就发通知。
-检测：新品上架、商品下架、价格变动、售罄、补货、新增分类。
+ÊØèÊ¨°ËøêË°åÔºöÊäìÂèñÂÆòÁΩëÊâÄÊúâÂïÜÂìÅÂàÜÁ±ªÈ°µ -> ‰∏é‰∏äÊ¨°Âø´ÁÖßÂØπÊØî -> ÊúâÂèòÂåñÂ∞±ÂèëÈÄöÁü•„ÄÇ
+Ê£ÄÊµãÔºöÊñ∞ÂìÅ‰∏äÊû∂„ÄÅÂïÜÂìÅ‰∏ãÊû∂„ÄÅ‰ª∑Ê†ºÂèòÂä®„ÄÅÂîÆÁΩÑ„ÄÅË°•Ë¥ß„ÄÅÊñ∞Â¢ûÂàÜÁ±ª„ÄÇ
 
-用法：
-  python3 monitor.py          # 正常运行一次
-  python3 monitor.py --test   # 发送一条测试通知
+Áî®Ê≥ïÔºö
+  python3 monitor.py          # Ê≠£Â∏∏ËøêË°å‰∏ÄÊ¨°
+  python3 monitor.py --test   # ÂèëÈÄÅ‰∏ÄÊù°ÊµãËØïÈÄöÁü•
 """
 import json
 import os
@@ -27,11 +27,12 @@ CONFIG_FILE = os.path.join(HERE, "config.json")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/128.0 Safari/537.36")
 
-# 官网导航里能看到的分类；运行时还会从首页导航自动发现新分类
+# ÂÆòÁΩëÂØºËà™ÈáåËÉΩÁúãÂà∞ÁöÑÂàÜÁ±ªÔºõËøêË°åÊó∂Ëøò‰ºö‰ªéÈ¶ñÈ°µÂØºËà™Ëá™Âä®ÂèëÁé∞Êñ∞ÂàÜÁ±ª
 KNOWN_CATEGORIES = [
     "/baccarat", "/scents", "/boxers-leggings", "/intimates", "/socks",
     "/underwear", "/scarf", "/on/demandware.store/Sites-ChromeHearts-Site/en_US/Search-Show?cgid=SWEATPANTS",
 ]
+SILENT_KINDS = {"üí≤ Êîπ‰ª∑"}  # Ëøô‰∫õÂèòÂåñÂè™ËÆ∞Êó•ÂøóÔºå‰∏çÊé®ÈÄÅ
 NON_CATEGORY = {"/", "/cart", "/login", "/contact", "/shop", "/#", ""}
 
 
@@ -61,6 +62,15 @@ def discover_categories(home_html):
     return sorted(cats)
 
 
+def norm_price(p):
+    """ÂÆòÁΩë‰ª∑Ê†ºÊúâÊó∂ÂÜô "$1,650.00"ÔºåÊúâÊó∂ÂÜô "1650.00"ÔºåÁªü‰∏ÄÊàê "1650.00"„ÄÇ"""
+    p = p.replace("$", "").replace(",", "").strip()
+    try:
+        return "%.2f" % float(p)
+    except ValueError:
+        return p
+
+
 def parse_products(html, category):
     products = {}
     soldout = set(re.findall(r'class="soldout"[^>]*href="[^"]*/([^/"]+)\.html', html))
@@ -72,7 +82,7 @@ def parse_products(html, category):
         link = re.search(r'href="([^"]*/%s\.html)' % re.escape(pid), html)
         products[pid] = {
             "name": attrs.get("name", "").strip(),
-            "price": attrs.get("price", ""),
+            "price": norm_price(attrs.get("price", "")),
             "category": attrs.get("category") or category,
             "soldout": pid in soldout,
             "url": urllib.parse.urljoin(BASE, unescape(link.group(1))) if link else BASE + category,
@@ -87,7 +97,7 @@ def scrape():
     for cat in categories:
         try:
             html = fetch(cat)
-        except Exception as e:  # 单个分类失败不影响其他分类
+        except Exception as e:  # Âçï‰∏™ÂàÜÁ±ªÂ§±Ë¥•‰∏çÂΩ±ÂìçÂÖ∂‰ªñÂàÜÁ±ª
             print(f"[warn] {cat}: {e}", file=sys.stderr)
             continue
         ok_cats.append(cat)
@@ -101,40 +111,40 @@ def scrape():
 def diff(old, new, old_cats, new_cats):
     changes = []
     for cat in sorted(set(new_cats) - set(old_cats)):
-        changes.append(("🆕 新分类", cat, BASE + cat))
+        changes.append(("üÜï Êñ∞ÂàÜÁ±ª", cat, BASE + cat))
     for pid, p in new.items():
         o = old.get(pid)
         label = f"{p['name']} ${p['price']}"
         if o is None:
-            changes.append(("🆕 上新", label + (" (售罄)" if p["soldout"] else ""), p["url"]))
+            changes.append(("üÜï ‰∏äÊñ∞", label + (" (ÂîÆÁΩÑ)" if p["soldout"] else ""), p["url"]))
             continue
-        if o["price"] != p["price"]:
-            changes.append(("💲 改价", f"{p['name']} ${o['price']} → ${p['price']}", p["url"]))
+        if norm_price(o["price"]) != p["price"]:
+            changes.append(("üí≤ Êîπ‰ª∑", f"{p['name']} ${norm_price(o['price'])} ‚Üí ${p['price']}", p["url"]))
         if o["soldout"] and not p["soldout"]:
-            changes.append(("✅ 补货", label, p["url"]))
+            changes.append(("‚úÖ Ë°•Ë¥ß", label, p["url"]))
         elif not o["soldout"] and p["soldout"]:
-            changes.append(("⛔ 售罄", label, p["url"]))
-    # 只有分类成功抓到时才判断下架，避免网络故障误报
+            changes.append(("‚õî ÂîÆÁΩÑ", label, p["url"]))
+    # Âè™ÊúâÂàÜÁ±ªÊàêÂäüÊäìÂà∞Êó∂ÊâçÂà§Êñ≠‰∏ãÊû∂ÔºåÈÅøÂÖçÁΩëÁªúÊïÖÈöúËØØÊä•
     for pid, o in old.items():
         if pid not in new and any(o.get("_cat") == c for c in new_cats):
-            changes.append(("🗑 下架", f"{o['name']} ${o['price']}", o["url"]))
+            changes.append(("üóë ‰∏ãÊû∂", f"{o['name']} ${norm_price(o['price'])}", o["url"]))
     return changes
 
 
 def notify(title, message, url=None):
     cfg = load_config()
     print(f"[notify] {title}: {message}")
-    # 1) macOS 系统通知（仅在 Mac 上运行时）
+    # 1) macOS Á≥ªÁªüÈÄöÁü•Ôºà‰ªÖÂú® Mac ‰∏äËøêË°åÊó∂Ôºâ
     if sys.platform == "darwin" and not os.environ.get("CI"):
         script = 'display notification %s with title %s sound name "Glass"' % (
             json.dumps(message, ensure_ascii=False), json.dumps(title, ensure_ascii=False))
         subprocess.run(["osascript", "-e", script], check=False)
-    # 2) 手机推送：Bark (iPhone) 或 ntfy；云端从环境变量读取
-    bark = os.environ.get("BARK_URL") or cfg.get("bark_url")  # 例如 https://api.day.app/你的key
+    # 2) ÊâãÊú∫Êé®ÈÄÅÔºöBark (iPhone) Êàñ ntfyÔºõ‰∫ëÁ´Ø‰ªéÁéØÂ¢ÉÂèòÈáèËØªÂèñ
+    bark = os.environ.get("BARK_URL") or cfg.get("bark_url")  # ‰æãÂ¶Ç https://api.day.app/‰Ω†ÁöÑkey
     if bark:
         q = urllib.parse.urlencode({"url": url or BASE, "group": "ChromeHearts", "level": "timeSensitive"})
         send(f"{bark.rstrip('/')}/{urllib.parse.quote(title)}/{urllib.parse.quote(message)}?{q}")
-    ntfy = os.environ.get("NTFY_TOPIC") or cfg.get("ntfy_topic")  # 例如 chromehearts-xxxx
+    ntfy = os.environ.get("NTFY_TOPIC") or cfg.get("ntfy_topic")  # ‰æãÂ¶Ç chromehearts-xxxx
     if ntfy:
         req = urllib.request.Request(
             f"https://ntfy.sh/{ntfy}", data=message.encode(),
@@ -152,12 +162,12 @@ def send(req):
 
 def main():
     if "--test" in sys.argv:
-        notify("Chrome Hearts 监控", "测试通知：监控已正常工作 ✅", BASE)
+        notify("Chrome Hearts ÁõëÊéß", "ÊµãËØïÈÄöÁü•ÔºöÁõëÊéßÂ∑≤Ê≠£Â∏∏Â∑•‰Ωú ‚úÖ", BASE)
         return
 
     categories, products = scrape()
     if not products:
-        print("[error] 没抓到任何商品，可能网站结构变了或被拦截", file=sys.stderr)
+        print("[error] Ê≤°ÊäìÂà∞‰ªª‰ΩïÂïÜÂìÅÔºåÂèØËÉΩÁΩëÁ´ôÁªìÊûÑÂèò‰∫ÜÊàñË¢´Êã¶Êà™", file=sys.stderr)
         sys.exit(1)
 
     try:
@@ -168,21 +178,23 @@ def main():
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     if state is None:
-        print(f"{now} 首次运行，已记录 {len(products)} 个商品 / {len(categories)} 个分类作为基准")
-        notify("Chrome Hearts 监控已启动", f"已记录 {len(products)} 个商品，之后有变化会通知你")
+        print(f"{now} È¶ñÊ¨°ËøêË°åÔºåÂ∑≤ËÆ∞ÂΩï {len(products)} ‰∏™ÂïÜÂìÅ / {len(categories)} ‰∏™ÂàÜÁ±ª‰Ωú‰∏∫Âü∫ÂáÜ")
+        notify("Chrome Hearts ÁõëÊéßÂ∑≤ÂêØÂä®", f"Â∑≤ËÆ∞ÂΩï {len(products)} ‰∏™ÂïÜÂìÅÔºå‰πãÂêéÊúâÂèòÂåñ‰ºöÈÄöÁü•‰Ω†")
     else:
         changes = diff(state["products"], products, state["categories"], categories)
         if changes:
             with open(LOG_FILE, "a") as f:
                 for kind, text, url in changes:
                     f.write(f"{now}\t{kind}\t{text}\t{url}\n")
-            for kind, text, url in changes[:5]:
+            # Êîπ‰ª∑Âè™ËÆ∞ÂΩïÂà∞ changes.logÔºå‰∏çÊé®ÈÄÅ
+            pushes = [c for c in changes if c[0] not in SILENT_KINDS]
+            for kind, text, url in pushes[:5]:
                 notify(f"Chrome Hearts {kind}", text, url)
-            if len(changes) > 5:
-                notify("Chrome Hearts", f"另有 {len(changes) - 5} 项变化，详见 changes.log")
-            print(f"{now} 发现 {len(changes)} 项变化")
+            if len(pushes) > 5:
+                notify("Chrome Hearts", f"Âè¶Êúâ {len(pushes) - 5} È°πÂèòÂåñÔºåËØ¶ËßÅ changes.log")
+            print(f"{now} ÂèëÁé∞ {len(changes)} È°πÂèòÂåñ")
         else:
-            print(f"{now} 无变化（{len(products)} 个商品）")
+            print(f"{now} Êó†ÂèòÂåñÔºà{len(products)} ‰∏™ÂïÜÂìÅÔºâ")
 
     with open(STATE_FILE, "w") as f:
         json.dump({"checked_date": now[:10], "categories": sorted(set(categories) | set((state or {}).get("categories", []))), "products": products},
