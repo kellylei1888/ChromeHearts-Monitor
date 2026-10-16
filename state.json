@@ -55,7 +55,7 @@
    "name": "CHAMPAGNE FLUTE",
    "price": "2800.00",
    "category": "Baccarat",
-   "soldout": true,
+   "soldout": false,
    "url": "https://www.chromehearts.com/baccarat/champagne-flute/177731CRYXXX042.html",
    "_cat": "/baccarat"
   },
