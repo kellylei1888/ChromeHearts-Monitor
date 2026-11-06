@@ -8,6 +8,7 @@
   "/on/demandware.store/Sites-ChromeHearts-Site/en_US/Search-Show?cgid=soap-n-water",
   "/scarf",
   "/scents",
+  "/slippers",
   "/socks",
   "/sports-mesh",
   "/underwear"
@@ -189,6 +190,14 @@
    "url": "https://www.chromehearts.com/intimates/lace-thong/201635AFWXXX033.html",
    "_cat": "/intimates"
   },
+  "222575AEGXXX059": {
+   "name": "MATH PLUS SCARF",
+   "price": "375.00",
+   "category": "scarf",
+   "soldout": false,
+   "url": "https://www.chromehearts.com/scarf/math-plus-scarf/222575AEGXXX059.html",
+   "_cat": "/scarf"
+  },
   "162006CRYXXX271": {
    "name": "+22+ Eau de Parfum",
    "price": "500.00",
@@ -284,6 +293,14 @@
    "soldout": false,
    "url": "https://www.chromehearts.com/scents/33-scented-candle-100g/172571CRYXXX274.html",
    "_cat": "/scents"
+  },
+  "204651B2UXXX07M": {
+   "name": "HOTEL SLIPPERS",
+   "price": "595.00",
+   "category": "Slippers",
+   "soldout": false,
+   "url": "https://www.chromehearts.com/slippers/hotel-slippers/204651B2UXXX07M.html",
+   "_cat": "/slippers"
   },
   "176354XXXXXX349": {
    "name": "CH LOGO SOCKS",
