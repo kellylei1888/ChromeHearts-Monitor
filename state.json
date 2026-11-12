@@ -3,6 +3,7 @@
  "categories": [
   "/baccarat",
   "/boxers-leggings",
+  "/eyewear",
   "/intimates",
   "/on/demandware.store/Sites-ChromeHearts-Site/en_US/Search-Show?cgid=SWEATPANTS",
   "/on/demandware.store/Sites-ChromeHearts-Site/en_US/Search-Show?cgid=soap-n-water",
@@ -141,6 +142,14 @@
    "soldout": false,
    "url": "https://www.chromehearts.com/boxers-leggings/long-johns/164943XXXXXX140.html",
    "_cat": "/boxers-leggings"
+  },
+  "21978827FE50010": {
+   "name": "MIO LORD",
+   "price": "1470.00",
+   "category": "Eyewear",
+   "soldout": false,
+   "url": "https://www.chromehearts.com/eyewear/mio-lord/21978827FE50010.html",
+   "_cat": "/eyewear"
   },
   "092826AI6XXXXXX": {
    "name": "CH PLUS TIGHTS",
