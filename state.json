@@ -179,7 +179,7 @@
    "name": "LACE G-STRING",
    "price": "220.00",
    "category": "INTIMATES",
-   "soldout": false,
+   "soldout": true,
    "url": "https://www.chromehearts.com/intimates/lace-g-string/201584AFWXXX030.html",
    "_cat": "/intimates"
   },
