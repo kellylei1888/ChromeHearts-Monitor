@@ -1,9 +1,10 @@
 {
- "checked_date": "2026-11-17",
+ "checked_date": "2026-11-18",
  "categories": [
   "/baccarat",
   "/boxers-leggings",
   "/eyewear",
+  "/hoodie",
   "/intimates",
   "/on/demandware.store/Sites-ChromeHearts-Site/en_US/Search-Show?cgid=SWEATPANTS",
   "/on/demandware.store/Sites-ChromeHearts-Site/en_US/Search-Show?cgid=soap-n-water",
@@ -142,6 +143,14 @@
    "soldout": false,
    "url": "https://www.chromehearts.com/boxers-leggings/long-johns/164943XXXXXX140.html",
    "_cat": "/boxers-leggings"
+  },
+  "152701BLKXXX754": {
+   "name": "BLUE GLITTER HOODIE",
+   "price": "750.00",
+   "category": "Hoodie",
+   "soldout": false,
+   "url": "https://www.chromehearts.com/hoodie/blue-glitter-hoodie/152701BLKXXX754.html",
+   "_cat": "/hoodie"
   },
   "092826AI6XXXXXX": {
    "name": "CH PLUS TIGHTS",
