@@ -1,5 +1,5 @@
 {
- "checked_date": "2026-11-25",
+ "checked_date": "2026-11-26",
  "categories": [
   "/baccarat",
   "/boxers-leggings",
@@ -20,7 +20,7 @@
    "name": "TUMBLER",
    "price": "2625.00",
    "category": "Baccarat",
-   "soldout": true,
+   "soldout": false,
    "url": "https://www.chromehearts.com/baccarat/tumbler/174132CRYXXX015.html",
    "_cat": "/baccarat"
   },
@@ -76,7 +76,7 @@
    "name": "WINE",
    "price": "2200.00",
    "category": "Baccarat",
-   "soldout": true,
+   "soldout": false,
    "url": "https://www.chromehearts.com/baccarat/wine/177733CRYXXX042.html",
    "_cat": "/baccarat"
   },
@@ -196,7 +196,7 @@
    "name": "+33+ Eau de Parfum",
    "price": "500.00",
    "category": "Scents",
-   "soldout": true,
+   "soldout": false,
    "url": "https://www.chromehearts.com/scents/33-eau-de-parfum/162006CRYXXX272.html",
    "_cat": "/scents"
   },
